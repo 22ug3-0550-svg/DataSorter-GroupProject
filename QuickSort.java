@@ -2,25 +2,47 @@ public class QuickSort {
     public static class Result {
         public int[] sortedArray;
         public int steps;
+        public long timeTaken;
 
-        public Result(int[] sortedArray, int steps) {
+        public Result(int[] sortedArray, int steps, long timeTaken) {
             this.sortedArray = sortedArray;
             this.steps = steps;
+            this.timeTaken = timeTaken;
         }
     }
 
     public static Result sort(int[] original) {
         int[] arr = original.clone();
+        long start = System.nanoTime();
         int[] stepCount = {0};
         sortHelper(arr, 0, arr.length - 1, stepCount);
-        return new Result(arr, stepCount[0]);
+        long end = System.nanoTime();
+        return new Result(arr, stepCount[0], end - start);
     }
 
     private static void sortHelper(int[] arr, int low, int high, int[] stepCount) {
         if (low < high) {
+            if (high - low < 10) {
+                insertionSort(arr, low, high, stepCount);
+                return;
+            }
             int pi = partition(arr, low, high, stepCount);
             sortHelper(arr, low, pi - 1, stepCount);
             sortHelper(arr, pi + 1, high, stepCount);
+        }
+    }
+
+    private static void insertionSort(int[] arr, int low, int high, int[] stepCount) {
+        for (int i = low + 1; i <= high; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            while (j >= low && arr[j] > key) {
+                stepCount[0]++; // comparison
+                arr[j + 1] = arr[j];
+                stepCount[0]++; // shift
+                j--;
+            }
+            arr[j + 1] = key;
         }
     }
 
