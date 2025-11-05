@@ -2,18 +2,22 @@ public class MergeSort {
     public static class Result {
         public int[] sortedArray;
         public int steps;
+        public long timeTaken;
 
-        public Result(int[] sortedArray, int steps) {
+        public Result(int[] sortedArray, int steps, long timeTaken) {
             this.sortedArray = sortedArray;
             this.steps = steps;
+            this.timeTaken = timeTaken;
         }
     }
 
     public static Result sort(int[] original) {
         int[] arr = original.clone();
+        long start = System.nanoTime();
         int[] stepCount = {0};
         int[] sorted = sortHelper(arr, stepCount);
-        return new Result(sorted, stepCount[0]);
+        long end = System.nanoTime();
+        return new Result(sorted, stepCount[0], end - start);
     }
 
     private static int[] sortHelper(int[] arr, int[] stepCount) {
